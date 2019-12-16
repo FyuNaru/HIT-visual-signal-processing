@@ -9,8 +9,8 @@ def IdealHighPassFiltering(f_shift):
     m = f_shift.shape[0]
     n = f_shift.shape[1]
     h1 = np.zeros((m, n))
-    x0 = np.floor(m)
-    y0 = np.floor(n)
+    x0 = np.floor(m/2)
+    y0 = np.floor(n/2)
     for i in range(m):
         for j in range(n):
             D = np.sqrt((i - x0)**2 + (j - y0)**2)
@@ -26,12 +26,12 @@ def GaussLowPassFiltering(f_shift):
     m = f_shift.shape[0]
     n = f_shift.shape[1]
     h1 = np.zeros((m, n))
-    x0 = np.floor(m)
-    y0 = np.floor(n)
+    x0 = np.floor(m/2)
+    y0 = np.floor(n/2)
     for i in range(m):
         for j in range(n):
             D = np.sqrt((i - x0)**2 + (j - y0)**2)
-            h1[i][j] = np.exp((-1)*D**2/2/D0**2)
+            h1[i][j] = np.exp((-1)*D**2/2/(D0**2))
     result = np.multiply(f_shift, h1)
     return result
 
@@ -54,7 +54,7 @@ new_image1 = np.uint8(np.real(np.fft.ifft2(new_f1)))
 plt.subplot(2,2,3)
 plt.imshow(new_image1, 'gray')
 # 高斯低通滤波
-GLPF = IdealHighPassFiltering(f_shift)
+GLPF = GaussLowPassFiltering(f_shift)
 new_f2 = np.fft.ifftshift(GLPF)
 new_image2 = np.uint8(np.real(np.fft.ifft2(new_f2)))
 plt.subplot(2,2,4)
