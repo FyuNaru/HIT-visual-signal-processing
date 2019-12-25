@@ -24,7 +24,6 @@ class Noise:
             pixel[0] = round(gray)
             pixel[1] = round(gray)
             pixel[2] = round(gray)
-
         # 将新图像保存到文件
         bmp.creataBmp(filename2)
         return
@@ -32,7 +31,7 @@ class Noise:
     def SaltAndPepperNoise(self, filename1, filename2):
         bmp = ReadBmp(filename1)
         # 生成椒盐噪声图像
-        percetage = 0.3
+        percetage = 0.05
         for pixel in bmp.data:
             # 图像灰度化
             gray = 0.299 * pixel[0] + 0.578 * pixel[1] + 0.114 * pixel[2]

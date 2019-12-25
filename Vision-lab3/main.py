@@ -4,6 +4,8 @@ import numpy as np
 def lpr(filename):
     img = cv2.imread(filename)
     # 预处理，包括灰度处理，高斯滤波平滑处理，Sobel提取边界，图像二值化
+    # 对于高斯滤波函数的参数设置，第四个参数设为零，表示不计算y方向的梯度，原因是车牌上的数字在竖方向较长，重点在于得到竖方向的边界
+    # 对于二值化函数的参数设置，第二个参数设为127，是二值化的阈值，是一个经验值
     gray_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     GaussianBlur_img = cv2.GaussianBlur(gray_img, (3, 3), 0)
     Sobel_img = cv2.Sobel(GaussianBlur_img, -1, 1, 0, ksize=3)
@@ -11,7 +13,7 @@ def lpr(filename):
 
     # 形态学运算
     kernel = np.ones((5, 15), np.uint8)
-    # 先闭运算将车牌部分连接，再开运算将不是整块部分的边界去掉
+    # 先闭运算将车牌数字部分连接，再开运算将不是块状的或是较小的部分去掉
     close_img = cv2.morphologyEx(binary_img, cv2.MORPH_CLOSE, kernel)
     open_img = cv2.morphologyEx(close_img, cv2.MORPH_OPEN, kernel)
     # kernel2 = np.ones((10, 10), np.uint8)
@@ -22,11 +24,12 @@ def lpr(filename):
 
     # 获取轮廓
     contours, hierarchy = cv2.findContours(dilation_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # 测试边框识别结果
     # cv2.drawContours(img, contours, -1, (0, 0, 255), 3)
     # cv2.imshow("lpr", img)
     # cv2.waitKey(0)
 
-    # 将轮廓转化为长方形
+    # 将轮廓规整为长方形
     rectangles = []
     for c in contours:
         x = []

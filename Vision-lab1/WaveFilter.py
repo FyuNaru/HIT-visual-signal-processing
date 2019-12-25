@@ -17,7 +17,6 @@ class WaveFilter:
                 + bmp.data[(j - 1) * bmp.biWidth + i + 1][0] + bmp.data[(j - 1) * bmp.biWidth + i - 1][0]
 
                 new_data.append(round(sum/8))
-
         for i in range(len(new_data)):
             bmp.data[i][0] = new_data[i]
             bmp.data[i][1] = new_data[i]

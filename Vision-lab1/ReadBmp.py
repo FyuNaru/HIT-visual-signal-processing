@@ -1,4 +1,3 @@
-import numpy as np
 from struct import unpack
 from struct import pack
 
